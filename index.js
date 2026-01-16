@@ -135,5 +135,13 @@ app.get("/login",(req,resp)=>{
 resp.sendFile(absPath)
 })
 
+
+//404 page not found
+let absolutePath=path.resolve('view')
+app.use((req,resp)=>{//multi purpose method.
+
+    //if status code 404 then send 404.html file 
+resp.status(404).sendFile(absolutePath+"/404.html")//Set status code.
+})
 // Start the server on port 3200
 app.listen(3200)//port
