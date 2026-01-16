@@ -34,23 +34,51 @@
 //--------------------------------------------------------------
 //use ES to import and export package.json:"type":"module"
 
-import express from 'express' //ECMAScript  syntax
-import home from './pages/home.js';
-import about, { contact } from './pages/about.js';
+// import express from 'express' //ECMAScript  syntax
+// import home from './pages/home.js';
+// import about, { contact } from './pages/about.js';
 
-let app=express()
+// let app=express()
 
-app.get("",(req,resp)=>{
-resp.send(home())
+// app.get("",(req,resp)=>{
+// resp.send(home())
+// })
+
+// app.get("/about",(req,resp)=>{
+//     resp.send(about(
+//     ))
+// })
+
+// app.get("/contact",(req,resp)=>{
+//     resp.send(contact())
+// })
+
+//--------------------------(Render inline  Html elements and form js)----------------------------------------
+import express from 'express'
+
+const app=express()//express exicute
+
+app.get("/",(req,resp)=>{
+resp.send("<h1>Home Page</h1> <a href='/login'>Go To Login</a>")
 })
 
-app.get("/about",(req,resp)=>{
-    resp.send(about(
-    ))
+app.get("/login",(req,resp)=>{
+resp.send(`<form action="/submit" method="post">
+    <input type="name" placeholder="enter name" name="name">
+    <br/><br>
+    <input type="password" placeholder="enter password" name="password">
+    <br/><br>
+    <button>Submit</button>
+    </form> 
+    <a href='/'>Back To Home</a>
+    `)
 })
 
-app.get("/contact",(req,resp)=>{
-    resp.send(contact())
+app.post("/submit",(req,resp)=>{
+resp.send("<h1>Data Submited</h1>&nbsp &nbsp&nbsp&nbsp<a href='/'>Back To Home</a>")
 })
+
+
+
 
 app.listen(3200)//port
