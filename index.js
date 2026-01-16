@@ -77,25 +77,36 @@
 // app.post("/submit",(req,resp)=>{
 // resp.send("<h1>Data Submited</h1>&nbsp &nbsp&nbsp&nbsp<a href='/'>Back To Home</a>")
 // })
+//-----------------------------------------------------------
+// This Express app serves home and login pages using separate modules and handles form submission via a POST route.
 
+// Import the Express framework (ES Module syntax)
 import express from 'express'
+
+// Import page functions that return HTML
 import home from './pages/home.js';
 import submit from './pages/submit.js';
 import login from './pages/login.js';
 
+// Create an Express application instance
 const app=express()
 
+//// Route
+// Route for Home page
+// When user opens '/', this function runs
 app.get("/",(req,resp)=>{
-resp.send(home())
+resp.send(home())// Send Home page HTML
 })
-
+// Route for Login page
+// Displays login form
 app.get("/login",(req,resp)=>{
-resp.send(login())
+resp.send(login())// Send Login page HTML
 })
-
+// Route to handle form submission
+// This route runs when form is submitted using POST
 app.post("/submit",(req,resp)=>{
-resp.send(submit())
+resp.send(submit())// Send Submit success page HTML
 })
 
-
+// Start the server on port 3200
 app.listen(3200)//port
