@@ -54,31 +54,48 @@
 // })
 
 //--------------------------(Render inline  Html elements and form js)----------------------------------------
-import express from 'express'
+// import express from 'express'
 
-const app=express()//express exicute
+// const app=express()//express exicute
+
+// app.get("/",(req,resp)=>{
+// resp.send("<h1>Home Page</h1> <a href='/login'>Go To Login</a>")
+// })
+
+// app.get("/login",(req,resp)=>{
+// resp.send(`<form action="/submit" method="post">
+//     <input type="name" placeholder="enter name" name="name">
+//     <br/><br>
+//     <input type="password" placeholder="enter password" name="password">
+//     <br/><br>
+//     <button>Submit</button>
+//     </form> 
+//     <a href='/'>Back To Home</a>
+//     `)
+// })
+
+// app.post("/submit",(req,resp)=>{
+// resp.send("<h1>Data Submited</h1>&nbsp &nbsp&nbsp&nbsp<a href='/'>Back To Home</a>")
+// })
+
+import express from 'express'
+import home from './pages/home.js';
+import submit from './pages/submit.js';
+import login from './pages/login.js';
+
+const app=express()
 
 app.get("/",(req,resp)=>{
-resp.send("<h1>Home Page</h1> <a href='/login'>Go To Login</a>")
+resp.send(home())
 })
 
 app.get("/login",(req,resp)=>{
-resp.send(`<form action="/submit" method="post">
-    <input type="name" placeholder="enter name" name="name">
-    <br/><br>
-    <input type="password" placeholder="enter password" name="password">
-    <br/><br>
-    <button>Submit</button>
-    </form> 
-    <a href='/'>Back To Home</a>
-    `)
+resp.send(login())
 })
 
 app.post("/submit",(req,resp)=>{
-resp.send("<h1>Data Submited</h1>&nbsp &nbsp&nbsp&nbsp<a href='/'>Back To Home</a>")
+resp.send(submit())
 })
-
-
 
 
 app.listen(3200)//port
