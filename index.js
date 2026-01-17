@@ -150,5 +150,6 @@ app.use((req,resp)=>{//multi purpose method.
 resp.status(404).sendFile(absolutePath+"/404.html")//Set status code.
 })
 
+
 // Start the server on port 3200
 app.listen(3200)//port
