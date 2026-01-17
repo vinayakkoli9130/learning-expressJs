@@ -163,7 +163,8 @@ resp.sendFile(absPath)
 
 
 //404 page not found
-let absolutePath=path.resolve('view')
+
+let absolutePath=path.resolve('view')//absolute path
 app.use((req,resp)=>{//multi purpose method.
     //if status code 404 then send 404.html file 
 resp.status(404).sendFile(absolutePath+"/404.html")//Set status code.
