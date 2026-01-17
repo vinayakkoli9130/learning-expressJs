@@ -118,12 +118,31 @@ import path from 'path' //Use the path module to get absolute path.
 
 const app=express()
 
+//-----------Middleware in express js----------//
+//Middleware in Express.js is a function that gets executed before the final route handler.
+//It can be used to check requests, log activities, authenticate users, validate data, and 
+
+// function checkout(req,resp,next){
+//     console.log("user is aceessing "+req.url+ " page")
+//     next()
+// }
+// app.use(checkout)
+//req is the request object
+//res is the response object
+//next() moves to the next middleware or route handler
+
+// or
+app.use((req,resp,next)=>{
+console.log("user accessing "+req.url+" page")
+next()
+})
+//-----------------------------------------------------------------
 //---------------Add css or static files with express js-----------------
 let publicStatic=path.resolve('public')//D:\Angular\Nodejs\learning expressJs\public
 //The express.static() function allows you to make the files inside 
 // the public folder accessible to the browser.
 app.use(express.static(publicStatic))//href="/css/styles.css"
-console.log(publicStatic)
+// console.log(publicStatic)
 //---------------------------------------------------
 app.get("/",(req,resp)=>{
 
@@ -149,6 +168,7 @@ app.use((req,resp)=>{//multi purpose method.
     //if status code 404 then send 404.html file 
 resp.status(404).sendFile(absolutePath+"/404.html")//Set status code.
 })
+
 
 
 // Start the server on port 3200
