@@ -118,6 +118,13 @@ import path from 'path' //Use the path module to get absolute path.
 
 const app=express()
 
+//---------------Add css or static files with express js-----------------
+let publicStatic=path.resolve('public')//D:\Angular\Nodejs\learning expressJs\public
+//The express.static() function allows you to make the files inside 
+// the public folder accessible to the browser.
+app.use(express.static(publicStatic))//href="/css/styles.css"
+console.log(publicStatic)
+//---------------------------------------------------
 app.get("/",(req,resp)=>{
 
     //We used path.resolve() to get the absolute path of HTML files.
@@ -139,9 +146,9 @@ resp.sendFile(absPath)
 //404 page not found
 let absolutePath=path.resolve('view')
 app.use((req,resp)=>{//multi purpose method.
-
     //if status code 404 then send 404.html file 
 resp.status(404).sendFile(absolutePath+"/404.html")//Set status code.
 })
+
 // Start the server on port 3200
 app.listen(3200)//port
