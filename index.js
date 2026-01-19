@@ -112,11 +112,11 @@
 
 //------------Render Html File-------------------
 
-import express from 'express'
+// import express from 'express'
 
-import path from 'path' //Use the path module to get absolute path.
+// import path from 'path' //Use the path module to get absolute path.
 
-const app=express()
+// const app=express()
 
 //-----------Middleware in express js----------//
 //Middleware in Express.js is a function that gets executed before the final route handler.
@@ -140,69 +140,116 @@ const app=express()
 // next()
 // })
 
-//-----------------------------------------------------------------
+//------------------------------Appliction Or Global Middleware-----------------------------------
+//means middleware apply all route handler
 //condition middleware
 
 //Age condition middleware
 //Checks if user provided age in the query (?age=20)
 //Blocks access if age is missing or less than 18
-function ageCheck(req,resp,next){
+// function ageCheck(req,resp,next){
+//     if(!req.query.age || req.query.age<18){
+// resp.send("Alert !:you are not access this page")
+//     }else{
+//         next()
+//     }
+// }
+// app.use(ageCheck)
+
+// ////ip condition check middleware
+// //Logs the visitor's IP address
+// //Blocks access for specific IP (example: 10.207.126.19)
+// function ipCheck(req,resp,next){
+//     let ip=req.socket.remoteAddress
+//     console.log(ip)
+// if(ip.includes("10.207.126.19")){//block ip
+// resp.send("Alert !, You Can Not Access This Page")
+// }else{
+//   next()
+// }
+// }
+// app.use(ipCheck)
+
+//---------------Add css or static files with express js-----------------
+// let publicPath=path.resolve('public')//D:\Angular\Nodejs\learning expressJs\public
+//The express.static() function allows you to make the files inside 
+// the public folder accessible to the browser.
+// app.use(express.static(publicPath))//href="/css/styles.css"
+// console.log(publicStatic)
+//---------------------------------------------------
+// app.get("/",(req,resp)=>{
+
+//     //We used path.resolve() to get the absolute path of HTML files.
+//     let absPath=path.resolve('view/home.html')
+// resp.sendFile(absPath)
+// })
+
+// app.get("/about",(req,resp)=>{
+//     let absPath=path.resolve('view/about.html')
+// resp.sendFile(absPath)
+// })
+
+// app.get("/login",(req,resp)=>{
+//     let absPath=path.resolve('view/login.html')
+// resp.sendFile(absPath)
+// })
+
+
+// //404 page not found
+
+// let absolutePath=path.resolve('view')//absolute path
+// app.use((req,resp)=>{//multi purpose method.
+//     //if status code 404 then send 404.html file 
+// resp.status(404).sendFile(absolutePath+"/404.html")//Set status code.
+// })
+
+
+
+// // Start the server on port 3200
+// app.listen(3200)//port
+
+//------------------------------Route Middleware---------------------------------
+//middleware applies only specific routes
+//exicute before final route hander
+
+import express from 'express'//import express module.
+const app=express()//create express appliction instance.
+
+//route middleware for check age
+function checkAgeRouteMiddleware(req,resp,next){
+    console.log(req.query.age)
     if(!req.query.age || req.query.age<18){
-resp.send("Alert !:you are not access this page")
+resp.send("<h1>Alert! You Can Not Access This Website</h1>")
     }else{
         next()
     }
+
 }
-app.use(ageCheck)
+// app.use(checkAgeRouteMiddleware)//appliction or globle middleware :middleware applies all route 
 
-////ip condition check middleware
-//Logs the visitor's IP address
-//Blocks access for specific IP (example: 10.207.126.19)
-function ipCheck(req,resp,next){
-    let ip=req.socket.remoteAddress
-    console.log(ip)
-if(ip.includes("10.207.126.19")){//block ip
-resp.send("Alert !, You Can Not Access This Page")
-}else{
-  next()
+//route middleware for check url
+function checkUrlRouteMiddleware(req,resp,next){
+    console.log("This Url Is-:",req.url)
+    next()
 }
-}
-app.use(ipCheck)
 
-//---------------Add css or static files with express js-----------------
-let publicPath=path.resolve('public')//D:\Angular\Nodejs\learning expressJs\public
-//The express.static() function allows you to make the files inside 
-// the public folder accessible to the browser.
-app.use(express.static(publicPath))//href="/css/styles.css"
-// console.log(publicStatic)
-//---------------------------------------------------
-app.get("/",(req,resp)=>{
-
-    //We used path.resolve() to get the absolute path of HTML files.
-    let absPath=path.resolve('view/home.html')
-resp.sendFile(absPath)
+//create routes
+app.get("",(req,resp)=>{
+resp.send("<h1>Home Page</h1>")
 })
 
-app.get("/about",(req,resp)=>{
-    let absPath=path.resolve('view/about.html')
-resp.sendFile(absPath)
+app.get("/login",checkUrlRouteMiddleware,(req,resp)=>{
+resp.send("<h1>Login Page</h1>")
 })
 
-app.get("/login",(req,resp)=>{
-    let absPath=path.resolve('view/login.html')
-resp.sendFile(absPath)
+//middleware apply users route.middleware used as parameter in route
+app.get("/users",checkAgeRouteMiddleware,checkUrlRouteMiddleware,(req,resp)=>{//apply multiple route middleware
+resp.send("<h1>Users Page</h1>")
 })
 
-
-//404 page not found
-
-let absolutePath=path.resolve('view')//absolute path
-app.use((req,resp)=>{//multi purpose method.
-    //if status code 404 then send 404.html file 
-resp.status(404).sendFile(absolutePath+"/404.html")//Set status code.
+//middleware apply products route.middleware used as parameter in route
+app.get("/products",checkAgeRouteMiddleware,checkUrlRouteMiddleware,(req,resp)=>{
+resp.send("<h1>Products Page</h1>")
 })
 
-
-
-// Start the server on port 3200
-app.listen(3200)//port
+app.listen(3200)
