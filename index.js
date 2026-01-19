@@ -255,50 +255,83 @@
 
 // app.listen(3200)
 
-//--------------------Built-in Level Middleware-------------------
-//Built-in middleware is already provided by Express. 
-//You don't need to create it — you just use it directly.
+// //--------------------Built-in Level Middleware-------------------
+// //Built-in middleware is already provided by Express. 
+// //You don't need to create it — you just use it directly.
 
-import express from 'express'//import express module
+// import express from 'express'//import express module
 
-import path from 'path'//import path module for absolute path
+// import path from 'path'//import path module for absolute path
 
+// const app=express()//create express application instance
+
+// //built Middleware:
+// //1.express.urlencoded
+// //This is a built-in middleware function in Express. 
+// //It parses incoming requests with urlencoded payloads and is based on body-parser.
+// app.use(express.urlencoded({extended:false}))//The extended option allows to choose between parsing the URL-encoded data with the querystring library (when false) or the qs library (when true).
+
+// //2.express.static('staticFileName')
+// //This is a built-in middleware function in Express. It serves static files and is based on serve-static.
+// app.use(express.static('public'))
+// //create route
+
+// app.get("",(req,resp)=>{
+//     let absPath=path.resolve("view/home.html")//create absolute path of html file
+//     resp.sendFile(absPath)
+//     //or
+//     // let absPath=path.resolve("view")
+//     // resp.sendFile(absPath+"/home.html")
+// })
+
+// app.get("/login",(req,resp)=>{
+//     resp.send(`<form action="/submit" method='post'>
+//         <input type='text' placeholder='enter mail' name='email'>
+//           <input type='text' placeholder='enter password' name='password'>
+//           <button>Submit</button>
+//     </form>`)
+// })
+
+// app.post("/submit",(req,resp)=>{
+//     console.log("User Log-in Details Are:",req.body)//body requiest
+//     resp.send("<h1>Submit Page<h1>")
+// })
+
+// app.get("/users",(req,resp)=>{
+//     resp.send("<h1>Users Page<h1>")
+// })
+
+// app.listen(3200)//listen port
+
+//-------------------:External Middleware:--------------------
+//External middleware is not built into Express.js.
+//You must install it separately via npm.
+//It adds extra functionality (like logging, CORS, authentication, etc.)
+
+import express from 'express'
+import morgan from 'morgan'//HTTP request logger middleware for node.js//npm i morgan
 const app=express()//create express application instance
 
-//built Middleware:
-//1.express.urlencoded
-//This is a built-in middleware function in Express. 
-//It parses incoming requests with urlencoded payloads and is based on body-parser.
-app.use(express.urlencoded({extended:false}))//The extended option allows to choose between parsing the URL-encoded data with the querystring library (when false) or the qs library (when true).
+//morgan is an external middleware used for logging HTTP requests in the terminal.
+//Helpful for debugging and monitoring incoming requests.
+app.use(morgan('dev'))//"dev" is a predefined format that logs method, URL, status code, response time, etc.
 
-//2.express.static('staticFileName')
-//This is a built-in middleware function in Express. It serves static files and is based on serve-static.
-app.use(express.static('public'))
-//create route
-
-app.get("",(req,resp)=>{
-    let absPath=path.resolve("view/home.html")//create absolute path of html file
-    resp.sendFile(absPath)
-    //or
-    // let absPath=path.resolve("view")
-    // resp.sendFile(absPath+"/home.html")
-})
-
-app.get("/login",(req,resp)=>{
-    resp.send(`<form action="/submit" method='post'>
-        <input type='text' placeholder='enter mail' name='email'>
-          <input type='text' placeholder='enter password' name='password'>
-          <button>Submit</button>
-    </form>`)
-})
-
-app.post("/submit",(req,resp)=>{
-    console.log("User Log-in Details Are:",req.body)//body requiest
-    resp.send("<h1>Submit Page<h1>")
+app.get("/",(req,resp)=>{
+resp.send("<h1>Home Page</h1>")
 })
 
 app.get("/users",(req,resp)=>{
-    resp.send("<h1>Users Page<h1>")
+    resp.send("<h1>Users Page</h1>")
 })
 
-app.listen(3200)//listen port
+app.get("/products",(req,resp)=>{
+    resp.send("<h1>Products Page</h1>")
+})
+
+app.get("/wait",(req,resp)=>{
+    setTimeout(()=>{
+        resp.send("result after 1 second")
+    },1000)
+})
+
+app.listen(3200)
