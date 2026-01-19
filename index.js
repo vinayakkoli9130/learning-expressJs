@@ -209,47 +209,96 @@
 // app.listen(3200)//port
 
 //------------------------------Route Middleware---------------------------------
-//middleware applies only specific routes
-//exicute before final route hander
 
-import express from 'express'//import express module.
-const app=express()//create express appliction instance.
+// //middleware applies only specific routes
+// //exicute before final route hander
 
-//route middleware for check age
-function checkAgeRouteMiddleware(req,resp,next){
-    console.log(req.query.age)
-    if(!req.query.age || req.query.age<18){
-resp.send("<h1>Alert! You Can Not Access This Website</h1>")
-    }else{
-        next()
-    }
+// import express from 'express'//import express module.
+// const app=express()//create express appliction instance.
 
-}
-// app.use(checkAgeRouteMiddleware)//appliction or globle middleware :middleware applies all route 
+// //route middleware for check age
+// function checkAgeRouteMiddleware(req,resp,next){
+//     console.log(req.query.age)
+//     if(!req.query.age || req.query.age<18){
+// resp.send("<h1>Alert! You Can Not Access This Website</h1>")
+//     }else{
+//         next()
+//     }
 
-//route middleware for check url
-function checkUrlRouteMiddleware(req,resp,next){
-    console.log("This Url Is-:",req.url)
-    next()
-}
+// }
+// // app.use(checkAgeRouteMiddleware)//appliction or globle middleware :middleware applies all route 
 
-//create routes
+// //route middleware for check url
+// function checkUrlRouteMiddleware(req,resp,next){
+//     console.log("This Url Is-:",req.url)
+//     next()
+// }
+
+// //create routes
+// app.get("",(req,resp)=>{
+// resp.send("<h1>Home Page</h1>")
+// })
+
+// app.get("/login",checkUrlRouteMiddleware,(req,resp)=>{
+// resp.send("<h1>Login Page</h1>")
+// })
+
+// //middleware apply users route.middleware used as parameter in route
+// app.get("/users",checkAgeRouteMiddleware,checkUrlRouteMiddleware,(req,resp)=>{//apply multiple route middleware
+// resp.send("<h1>Users Page</h1>")
+// })
+
+// //middleware apply products route.middleware used as parameter in route
+// app.get("/products",checkAgeRouteMiddleware,checkUrlRouteMiddleware,(req,resp)=>{
+// resp.send("<h1>Products Page</h1>")
+// })
+
+// app.listen(3200)
+
+//--------------------Built-in Level Middleware-------------------
+//Built-in middleware is already provided by Express. 
+//You don't need to create it — you just use it directly.
+
+import express from 'express'//import express module
+
+import path from 'path'//import path module for absolute path
+
+const app=express()//create express application instance
+
+//built Middleware:
+//1.express.urlencoded
+//This is a built-in middleware function in Express. 
+//It parses incoming requests with urlencoded payloads and is based on body-parser.
+app.use(express.urlencoded({extended:false}))//The extended option allows to choose between parsing the URL-encoded data with the querystring library (when false) or the qs library (when true).
+
+//2.express.static('staticFileName')
+//This is a built-in middleware function in Express. It serves static files and is based on serve-static.
+app.use(express.static('public'))
+//create route
+
 app.get("",(req,resp)=>{
-resp.send("<h1>Home Page</h1>")
+    let absPath=path.resolve("view/home.html")//create absolute path of html file
+    resp.sendFile(absPath)
+    //or
+    // let absPath=path.resolve("view")
+    // resp.sendFile(absPath+"/home.html")
 })
 
-app.get("/login",checkUrlRouteMiddleware,(req,resp)=>{
-resp.send("<h1>Login Page</h1>")
+app.get("/login",(req,resp)=>{
+    resp.send(`<form action="/submit" method='post'>
+        <input type='text' placeholder='enter mail' name='email'>
+          <input type='text' placeholder='enter password' name='password'>
+          <button>Submit</button>
+    </form>`)
 })
 
-//middleware apply users route.middleware used as parameter in route
-app.get("/users",checkAgeRouteMiddleware,checkUrlRouteMiddleware,(req,resp)=>{//apply multiple route middleware
-resp.send("<h1>Users Page</h1>")
+app.post("/submit",(req,resp)=>{
+    console.log("User Log-in Details Are:",req.body)//body requiest
+    resp.send("<h1>Submit Page<h1>")
 })
 
-//middleware apply products route.middleware used as parameter in route
-app.get("/products",checkAgeRouteMiddleware,checkUrlRouteMiddleware,(req,resp)=>{
-resp.send("<h1>Products Page</h1>")
+app.get("/users",(req,resp)=>{
+    resp.send("<h1>Users Page<h1>")
 })
 
-app.listen(3200)
+app.listen(3200)//listen port
