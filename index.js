@@ -122,26 +122,58 @@ const app=express()
 //Middleware in Express.js is a function that gets executed before the final route handler.
 //It can be used to check requests, log activities, authenticate users, validate data, and 
 
-// function checkout(req,resp,next){
+
+//Application Middleware
+// function checRout(req,resp,next){
 //     console.log("user is aceessing "+req.url+ " page")
 //     next()
 // }
-// app.use(checkout)
+// app.use(checkRout)
 //req is the request object
 //res is the response object
 //next() moves to the next middleware or route handler
 
 // or
-app.use((req,resp,next)=>{
-console.log("user accessing "+req.url+" page")
-next()
-})
+
+// app.use((req,resp,next)=>{
+// console.log("user accessing "+req.url+" page")
+// next()
+// })
+
 //-----------------------------------------------------------------
+//condition middleware
+
+//Age condition middleware
+//Checks if user provided age in the query (?age=20)
+//Blocks access if age is missing or less than 18
+function ageCheck(req,resp,next){
+    if(!req.query.age || req.query.age<18){
+resp.send("Alert !:you are not access this page")
+    }else{
+        next()
+    }
+}
+app.use(ageCheck)
+
+////ip condition check middleware
+//Logs the visitor's IP address
+//Blocks access for specific IP (example: 10.207.126.19)
+function ipCheck(req,resp,next){
+    let ip=req.socket.remoteAddress
+    console.log(ip)
+if(ip.includes("10.207.126.19")){//block ip
+resp.send("Alert !, You Can Not Access This Page")
+}else{
+  next()
+}
+}
+app.use(ipCheck)
+
 //---------------Add css or static files with express js-----------------
-let publicStatic=path.resolve('public')//D:\Angular\Nodejs\learning expressJs\public
+let publicPath=path.resolve('public')//D:\Angular\Nodejs\learning expressJs\public
 //The express.static() function allows you to make the files inside 
 // the public folder accessible to the browser.
-app.use(express.static(publicStatic))//href="/css/styles.css"
+app.use(express.static(publicPath))//href="/css/styles.css"
 // console.log(publicStatic)
 //---------------------------------------------------
 app.get("/",(req,resp)=>{
