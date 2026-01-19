@@ -303,35 +303,71 @@
 
 // app.listen(3200)//listen port
 
-//-------------------:External Middleware:--------------------
-//External middleware is not built into Express.js.
-//You must install it separately via npm.
-//It adds extra functionality (like logging, CORS, authentication, etc.)
+// //-------------------:External Middleware:--------------------
+// //External middleware is not built into Express.js.
+// //You must install it separately via npm.
+// //It adds extra functionality (like logging, CORS, authentication, etc.)
+
+// import express from 'express'
+// import morgan from 'morgan'//HTTP request logger middleware for node.js//npm i morgan
+// const app=express()//create express application instance
+
+// //morgan is an external middleware used for logging HTTP requests in the terminal.
+// //Helpful for debugging and monitoring incoming requests.
+// app.use(morgan('dev'))//"dev" is a predefined format that logs method, URL, status code, response time, etc.
+
+// app.get("/",(req,resp)=>{
+// resp.send("<h1>Home Page</h1>")
+// })
+
+// app.get("/users",(req,resp)=>{
+//     resp.send("<h1>Users Page</h1>")
+// })
+
+// app.get("/products",(req,resp)=>{
+//     resp.send("<h1>Products Page</h1>")
+// })
+
+// app.get("/wait",(req,resp)=>{
+//     setTimeout(()=>{
+//         resp.send("result after 1 second")
+//     },1000)
+// })
+
+// app.listen(3200)
+
+//-------------------------Error Handling Middleware--------------------------
+//It is a special type of middleware in Express.js.
+//It catches and handles errors that occur during route processing.
+//Helps to show a friendly message instead of crashing the server.
 
 import express from 'express'
-import morgan from 'morgan'//HTTP request logger middleware for node.js//npm i morgan
-const app=express()//create express application instance
 
-//morgan is an external middleware used for logging HTTP requests in the terminal.
-//Helpful for debugging and monitoring incoming requests.
-app.use(morgan('dev'))//"dev" is a predefined format that logs method, URL, status code, response time, etc.
+const app=express()
 
 app.get("/",(req,resp)=>{
-resp.send("<h1>Home Page</h1>")
+resp.send("Home Page")
 })
 
 app.get("/users",(req,resp)=>{
-    resp.send("<h1>Users Page</h1>")
+resp.send1("Users Page")
 })
 
-app.get("/products",(req,resp)=>{
-    resp.send("<h1>Products Page</h1>")
+//custom erro
+app.get("/error",(req,resp,next)=>{
+const error=new Error('')
+error.status=404
+next(error)
+
 })
 
-app.get("/wait",(req,resp)=>{
-    setTimeout(()=>{
-        resp.send("result after 1 second")
-    },1000)
+// function errorHandling(error,req,resp,next){
+// resp.status(error.status || 500).send("<h1>Try After Some Time</h1>")
+// }
+// app.use(errorHandling)
+//or
+app.use((error,req,resp,next)=>{
+resp.status(error.status || 500).send("<h1>Try After Some Time</h1>")
 })
 
 app.listen(3200)
