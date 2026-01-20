@@ -1,0 +1,15 @@
+h1{
+    color: orangered;
+}
+
+a{
+    text-decoration: none;
+    background-color: rgb(4, 4, 241);
+    color:white;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+a:hover{
+    background-color: aquamarine;
+}
