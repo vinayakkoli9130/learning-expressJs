@@ -355,26 +355,39 @@
 
 // app.listen(3200)
 
-//--------Submit form data and display on ejs template engine page------------------------
+// //--------Submit form data and display on ejs template engine page------------------------
+// import express from 'express'
+
+// const app=express()
+// app.use(express.urlencoded({extended:false}))
+// app.set('view engine','ejs')
+
+// app.get("/add-user",(req,resp)=>{
+// resp.render('addUser.ejs')//to render and send EJS templates to the client.
+// })
+
+// app.post("/submit-user",(req,resp)=>{
+//     console.log(req.body)
+//     resp.render('submitUser.ejs',req.body)
+// })
+
+// app.get("/users",(req,resp)=>{
+//     const users=["vinny","manny","ganny","sunny"]
+//     const isLogin=true
+// resp.render('users',{users,isLogin})
+// })
+
+// app.listen(3200)
+
+//-------------------MVC Architecture-------------------//
+
 import express from 'express'
+import { handleUsers } from './controller/userController.js';
 
 const app=express()
-app.use(express.urlencoded({extended:false}))
-app.set('view engine','ejs')
 
-app.get("/add-user",(req,resp)=>{
-resp.render('addUser.ejs')//to render and send EJS templates to the client.
-})
+app.set('view engine','ejs')//it tells express use ejs engine
 
-app.post("/submit-user",(req,resp)=>{
-    console.log(req.body)
-    resp.render('submitUser.ejs',req.body)
-})
-
-app.get("/users",(req,resp)=>{
-    const users=["vinny","manny","ganny","sunny"]
-    const isLogin=true
-resp.render('users',{users,isLogin})
-})
+app.get("/users",handleUsers)
 
 app.listen(3200)
