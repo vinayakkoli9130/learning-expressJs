@@ -336,38 +336,18 @@
 
 // app.listen(3200)
 
-//-------------------------Error Handling Middleware--------------------------
-//It is a special type of middleware in Express.js.
-//It catches and handles errors that occur during route processing.
-//Helps to show a friendly message instead of crashing the server.
+// ----------------Template Engine-------------------------
+//create dynamic web pages by merging html with data from server.we use ejs(embedded javascript)
 
-import express from 'express'
+import express from "express";
 
 const app=express()
 
-app.get("/",(req,resp)=>{
-resp.send("Home Page")
-})
-
-app.get("/users",(req,resp)=>{
-resp.send1("Users Page")
-})
-
-//custom erro
-app.get("/error",(req,resp,next)=>{
-const error=new Error('')
-error.status=404
-next(error)
-
-})
-
-// function errorHandling(error,req,resp,next){
-// resp.status(error.status || 500).send("<h1>Try After Some Time</h1>")
-// }
-// app.use(errorHandling)
-//or
-app.use((error,req,resp,next)=>{
-resp.status(error.status || 500).send("<h1>Try After Some Time</h1>")
+app.set('view engine','ejs')//set express view engine ejs,tells express use ejs.
+//Note: EJS automatically looks inside the views/ folder
+app.get("",(req,resp)=>{
+resp.render('home',{name:"Vinayak Koli",course:"Learning Node.js"})//send data to ejs file
 })
 
 app.listen(3200)
+
