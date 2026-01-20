@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users List</title>
+</head>
+
+<body>
+    <h1>User List Page</h1>
+    <!-- Use <% %> to write JavaScript (like loops and conditions).
+         Use <%= %> to print values to HTML.
+         Don’t use = if you’re not printing anything. -->
+    <ul>
+        <%if(isLogin && users && users.length> 0){%>
+            <%for(let i=0;i<users.length;i++){%>
+                <li>
+                    <%=users[i] %>
+                </li>
+                <%}%>
+                    <%}else{%>
+                        <h1>User not Found Or Not Loggin</h1>
+                        <%}%>
+    </ul>
+</body>
+
+</html>
