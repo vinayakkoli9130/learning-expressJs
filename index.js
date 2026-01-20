@@ -339,15 +339,36 @@
 // ----------------Template Engine-------------------------
 //create dynamic web pages by merging html with data from server.we use ejs(embedded javascript)
 
-import express from "express";
+// import express from "express";
+
+// const app=express()
+
+//// 🔑 tell Express the new folder name template
+
+//app.set("views", path.resolve("templates"));//path for absolute path
+
+// app.set('view engine','ejs')//set express view engine ejs,tells express use ejs.
+// //Note: EJS automatically looks inside the views/ folder
+// app.get("",(req,resp)=>{
+// resp.render('home',{name:"Vinayak Koli",course:"Learning Node.js"})//send data to ejs file
+// })
+
+// app.listen(3200)
+
+//--------Submit form data and display on ejs template engine page------------------------
+import express from 'express'
 
 const app=express()
+app.use(express.urlencoded({extended:false}))
+app.set('view engine','ejs')
 
-app.set('view engine','ejs')//set express view engine ejs,tells express use ejs.
-//Note: EJS automatically looks inside the views/ folder
-app.get("",(req,resp)=>{
-resp.render('home',{name:"Vinayak Koli",course:"Learning Node.js"})//send data to ejs file
+app.get("/add-user",(req,resp)=>{
+resp.render('addUser.ejs')//to render and send EJS templates to the client.
+})
+
+app.post("/submit-user",(req,resp)=>{
+    console.log(req.body)
+    resp.render('submitUser.ejs',req.body)
 })
 
 app.listen(3200)
-
