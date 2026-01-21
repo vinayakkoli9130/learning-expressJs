@@ -379,15 +379,48 @@
 
 // app.listen(3200)
 
-//-------------------MVC Architecture-------------------//
+// //-------------------MVC Architecture-------------------//
 
+// import express from 'express'
+// import { handleUsers } from './controller/userController.js';
+
+// const app=express()
+
+// app.set('view engine','ejs')//it tells express use ejs engine
+
+// app.get("/users",handleUsers)
+
+// app.listen(3200)
+
+//-----------------------Dynamic Routes-----------------
 import express from 'express'
-import { handleUsers } from './controller/userController.js';
 
 const app=express()
 
-app.set('view engine','ejs')//it tells express use ejs engine
+//In a web app, when a user visits a specific URL, we use a route to handle that request.
+app.get("",(req,resp)=>{
+    const users=["mahi","vinny","dipu","bapu","gannu"]//static data
 
-app.get("/users",handleUsers)
+    let data=`<ul>`
+
+    for(let i=0;i<users.length;i++){
+       data+=`<li><a href='/user/${users[i]}'>${users[i]}</a></li>`
+    }
+
+    //dynamic route
+    //Dynamic routes allow us to pass dynamic data through the URL using parameters.
+    // Instead of writing a new route for every user, we write one route that accepts 
+    // any user name as a parameter.
+    app.get("/user/:name",(req,resp)=>{
+        console.log(req.params.name)
+        const userName=req.params.name
+        resp.send(`this is ${userName} profile page `)
+    })
+
+    data+=`</ul>`
+
+resp.send(data)
+
+})
 
 app.listen(3200)
