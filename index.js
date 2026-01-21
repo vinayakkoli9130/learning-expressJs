@@ -392,35 +392,66 @@
 
 // app.listen(3200)
 
-//-----------------------Dynamic Routes-----------------
-import express from 'express'
+// //-----------------------Dynamic Routes-----------------
+// import express from 'express'
 
+// const app=express()
+
+// //In a web app, when a user visits a specific URL, we use a route to handle that request.
+// app.get("",(req,resp)=>{
+//     const users=["mahi","vinny","dipu","bapu","gannu"]//static data
+
+//     let data=`<ul>`
+
+//     for(let i=0;i<users.length;i++){
+//        data+=`<li><a href='/user/${users[i]}'>${users[i]}</a></li>`
+//     }
+
+//     //dynamic route
+//     //Dynamic routes allow us to pass dynamic data through the URL using parameters.
+//     // Instead of writing a new route for every user, we write one route that accepts 
+//     // any user name as a parameter.
+//     app.get("/user/:name",(req,resp)=>{
+//         console.log(req.params.name)
+//         const userName=req.params.name
+//         resp.send(`this is ${userName} profile page `)
+//     })
+
+//     data+=`</ul>`
+
+// resp.send(data)
+
+// })
+
+// app.listen(3200)
+
+//---------------API Example with Dynamic Routes-----------------
+
+import express from 'express'
+import usersData from './users.json' with {type:'json'}
 const app=express()
 
-//In a web app, when a user visits a specific URL, we use a route to handle that request.
 app.get("",(req,resp)=>{
-    const users=["mahi","vinny","dipu","bapu","gannu"]//static data
-
-    let data=`<ul>`
-
-    for(let i=0;i<users.length;i++){
-       data+=`<li><a href='/user/${users[i]}'>${users[i]}</a></li>`
-    }
-
-    //dynamic route
-    //Dynamic routes allow us to pass dynamic data through the URL using parameters.
-    // Instead of writing a new route for every user, we write one route that accepts 
-    // any user name as a parameter.
-    app.get("/user/:name",(req,resp)=>{
-        console.log(req.params.name)
-        const userName=req.params.name
-        resp.send(`this is ${userName} profile page `)
-    })
-
-    data+=`</ul>`
-
-resp.send(data)
-
+resp.send(usersData)
 })
 
+//dynamic route
+
+//Fetch a Single User by ID (Dynamic Route)
+app.get("/user/:id",(req,resp)=>{
+    const id=req.params.id//get req id
+    console.log(id)
+   const filteredData= usersData.filter((user)=>user.id==id)//compaire user id with request id
+resp.send(filteredData)
+})
+
+//Fetch a User by Name (Case-Insensitive Match)
+//get user by name
+app.get("/username/:name",(req,resp)=>{
+const name=req.params.name
+console.log(name)
+const filteredData=usersData.filter((user)=>user.name.toLowerCase()==name.toLowerCase())
+resp.send(filteredData)
+})
+    
 app.listen(3200)
