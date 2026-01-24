@@ -425,33 +425,69 @@
 
 // app.listen(3200)
 
-//---------------API Example with Dynamic Routes-----------------
+// //---------------API Example with Dynamic Routes-----------------
+
+// import express from 'express'
+// import usersData from './users.json' with {type:'json'}
+// const app=express()
+
+// app.get("",(req,resp)=>{
+// resp.send(usersData)
+// })
+
+// //dynamic route
+
+// //Fetch a Single User by ID (Dynamic Route)
+// app.get("/user/:id",(req,resp)=>{
+//     const id=req.params.id//get req id
+//     console.log(id)
+//    const filteredData= usersData.filter((user)=>user.id==id)//compaire user id with request id
+// resp.send(filteredData)
+// })
+
+// //Fetch a User by Name (Case-Insensitive Match)
+// //get user by name
+// app.get("/username/:name",(req,resp)=>{
+// const name=req.params.name
+// console.log(name)
+// const filteredData=usersData.filter((user)=>user.name.toLowerCase()==name.toLowerCase())
+// resp.send(filteredData)
+// })
+    
+// app.listen(3200)
+
+console.log("------------Connect node with mongodb-----------------------")
 
 import express from 'express'
-import usersData from './users.json' with {type:'json'}
+
+import { MongoClient } from 'mongodb'//The MongoClient class is a class that allows for making Connections to MongoDB.
+
+// Define DB name and MongoDB URL
+const dbName='college'//database name.
+
+const url="mongodb://localhost:27017"//url of mangodb defult url
+
+// Create MongoDB client
+const client= new MongoClient(url)//this client need to connet to the nodejs
+
+// Create async function for DB connection
+async function dbConnection(){
+
+ await client.connect()
+
+ const db=client.db(dbName)
+
+ const collection=db.collection('students')
+
+ const result= await collection.find().toArray()
+
+ console.log(result)
+}
+
+// Call connection function
+dbConnection()
+
+// Create express app
 const app=express()
 
-app.get("",(req,resp)=>{
-resp.send(usersData)
-})
-
-//dynamic route
-
-//Fetch a Single User by ID (Dynamic Route)
-app.get("/user/:id",(req,resp)=>{
-    const id=req.params.id//get req id
-    console.log(id)
-   const filteredData= usersData.filter((user)=>user.id==id)//compaire user id with request id
-resp.send(filteredData)
-})
-
-//Fetch a User by Name (Case-Insensitive Match)
-//get user by name
-app.get("/username/:name",(req,resp)=>{
-const name=req.params.name
-console.log(name)
-const filteredData=usersData.filter((user)=>user.name.toLowerCase()==name.toLowerCase())
-resp.send(filteredData)
-})
-    
 app.listen(3200)
