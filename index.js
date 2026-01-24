@@ -456,38 +456,69 @@
     
 // app.listen(3200)
 
-console.log("------------Connect node with mongodb-----------------------")
+// console.log("------------Connect node with mongodb-----------------------")
+
+// import express from 'express'
+
+// import { MongoClient } from 'mongodb'//The MongoClient class is a class that allows for making Connections to MongoDB.
+
+// // Define DB name and MongoDB URL
+// const dbName='college'//database name.
+
+// const url="mongodb://localhost:27017"//url of mangodb defult url
+
+// // Create MongoDB client
+// const client= new MongoClient(url)//this client need to connet to the nodejs
+
+// // Create async function for DB connection
+// async function dbConnection(){
+
+//  await client.connect()
+
+//  const db=client.db(dbName)
+
+//  const collection=db.collection('students')
+
+//  const result= await collection.find().toArray()
+
+//  console.log(result)
+// }
+
+// // Call connection function
+// dbConnection()
+
+// // Create express app
+// const app=express()
+
+// app.listen(3200)
+
+////-----------------:Display MongoDB Data on UI using Node.js and EJS.-:--------------
 
 import express from 'express'
 
-import { MongoClient } from 'mongodb'//The MongoClient class is a class that allows for making Connections to MongoDB.
+import { MongoClient} from 'mongodb'
 
-// Define DB name and MongoDB URL
-const dbName='college'//database name.
-
-const url="mongodb://localhost:27017"//url of mangodb defult url
-
-// Create MongoDB client
-const client= new MongoClient(url)//this client need to connet to the nodejs
-
-// Create async function for DB connection
-async function dbConnection(){
-
- await client.connect()
-
- const db=client.db(dbName)
-
- const collection=db.collection('students')
-
- const result= await collection.find().toArray()
-
- console.log(result)
-}
-
-// Call connection function
-dbConnection()
-
-// Create express app
 const app=express()
 
+app.set('view engine','ejs')//tells nodejs use ejs
+
+const client = new MongoClient("mongodb://localhost:27017")
+
+app.get("/",async (req,resp)=>{
+
+await client.connect()
+
+const db=client.db('college')
+
+const collection=db.collection('students')
+
+const students=await collection.find().toArray()
+console.log(students)
+
+resp.render("students",{students})
+})
+
 app.listen(3200)
+
+
+
