@@ -492,33 +492,59 @@
 
 // app.listen(3200)
 
-////-----------------:Display MongoDB Data on UI using Node.js and EJS.-:--------------
+// ////-----------------:Display MongoDB Data on UI using Node.js and EJS.-:--------------
+
+// import express from 'express'
+
+// import { MongoClient} from 'mongodb'
+
+// const app=express()
+
+// app.set('view engine','ejs')//tells nodejs use ejs
+
+// const client = new MongoClient("mongodb://localhost:27017")
+
+// app.get("/",async (req,resp)=>{
+
+// await client.connect()
+
+// const db=client.db('college')
+
+// const collection=db.collection('students')
+
+// const students=await collection.find().toArray()
+// console.log(students)
+
+// resp.render("students",{students})
+// })
+
+// app.listen(3200)
+
+console.log("---------------REST API with Node.js & MongoDB-------------")
 
 import express from 'express'
-
-import { MongoClient} from 'mongodb'
+import { MongoClient } from 'mongodb'
 
 const app=express()
+app.set('view engine','ejs')
+const client=new MongoClient("mongodb://localhost:27017")
 
-app.set('view engine','ejs')//tells nodejs use ejs
+client.connect().then((connection)=>{
+const db=connection.db('college')
 
-const client = new MongoClient("mongodb://localhost:27017")
-
-app.get("/",async (req,resp)=>{
-
-await client.connect()
-
-const db=client.db('college')
+app.get("/api",async(req,resp)=>{
 
 const collection=db.collection('students')
+const students= await collection.find().toArray()
+resp.send(students)
+})
 
-const students=await collection.find().toArray()
-console.log(students)
+app.get("/ui",async(req,resp)=>{
+const collection=db.collection('students')
+const students= await collection.find().toArray()
+resp.render('students',{students})
+})
 
-resp.render("students",{students})
 })
 
 app.listen(3200)
-
-
-
