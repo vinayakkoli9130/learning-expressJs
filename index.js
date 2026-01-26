@@ -550,7 +550,7 @@
 console.log("------------Save Form Data in MongoDB---------")
 
 import express from 'express'//import express module
-import { MongoClient } from 'mongodb'//import MongoClient for making connection to mongodb
+import { MongoClient, ObjectId } from 'mongodb'//import MongoClient for making connection to mongodb
 
 const app=express()//create express application instance
 
@@ -617,6 +617,44 @@ if( !name || !age || !email || !city ){
     resp.send({message:"data stored ",suceess:true,result:student})
 
  })
+ //delete from thunder client 
+ app.delete("/delete/:id",async(req,resp)=>{
 
+console.log(req.params.id)
+
+const collection=db.collection('students')
+
+const result=await collection.deleteOne({_id: new ObjectId(req.params.id)})
+
+if(result){
+    resp.send({
+        message:"student data deleted",
+        suceess:true
+    })
+}else{
+    resp.send({
+        message:"student data not deleted,try after sometime",
+        suceess:false
+    })
+}
+
+ })
+
+ //delete from ui
+ app.get("/ui/delete/:id",async(req,resp)=>{
+
+console.log(req.params.id)
+
+const collection=db.collection('students')
+
+const result=await collection.deleteOne({_id: new ObjectId(req.params.id)})
+
+if(result){
+    resp.send('<h1>Student Data Deleted<h1>')
+}else{
+    resp.send('<h1>Student Data Deleted<h1>')
+}
+// resp.send("working")
+ })
 })
 app.listen(3200)//port
