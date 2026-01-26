@@ -19,7 +19,8 @@
                 <th>Age</th>
                 <th>Email</th>
                 <th>City</th>
-              <th>Operation</th>
+              <th>Delete</th>
+              <th>Update</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,7 @@
              <td><%=student.email%></td>
              <td><%=student.city%></td>
              <td><a href="/ui/delete/<%=student._id%>">Delete</a></td>
+             <td><a href="/ui/student/<%=student._id%>">Update</a></td>
              </tr>
            <% })%>
            
