@@ -558,6 +558,8 @@ app.set('view engine','ejs')//tells node.js use ejs
 
 app.use(express.urlencoded({extended:true}))//get request body data
 
+app.use(express.json())//This is a built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser.
+
 const client=new MongoClient("mongodb://localhost:27017")//mongodb url pass to MongoClient
 
 client.connect().then((connection)=>{//connect mongodb
@@ -585,7 +587,7 @@ app.get("/add",(req,resp)=>{//create add route for get data from browser
     //     </form>
     //     `)
 
-    //with ejs with 
+    //with ejs 
     resp.render('add-student')
 })
 
@@ -596,6 +598,25 @@ const students=await db.collection('students').insertOne(req.body)//create add-s
 console.log(students)
 })
 
-})
+//Make POST Method REST API with Node.js & MongoDB from thunder client send data
+//api request
+app.post("/add-student-api",async (req,resp)=>{
 
+    console.log(req.body)
+    
+const {name,age,email,city}=req.body//destructuring
+
+if( !name || !age || !email || !city ){
+
+  resp.send({message:"operation failed",suceess:false})
+
+  return false
+}
+    const student= await db.collection('students').insertOne(req.body)
+   
+    resp.send({message:"data stored ",suceess:true,result:student})
+
+ })
+
+})
 app.listen(3200)//port
