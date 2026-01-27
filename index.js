@@ -711,31 +711,52 @@
 
 // app.listen(3200)
 
-console.log("-----------:Connect MongoDB to Nodejs Using Mongoose:----------")
+// console.log("-----------:Connect MongoDB to Nodejs Using Mongoose:----------")
 
 
-import mongoose from "mongoose"//import mongoose
+// import mongoose from "mongoose"//import mongoose
 
-async function dbConnection(){
-                              //url                  db name
-   await mongoose.connect("mongodb://localhost:27017/college")
+// async function dbConnection(){
+//                               //url                  db name
+//    await mongoose.connect("mongodb://localhost:27017/college")
 
-   console.log("MongoDB Connected")
+//    console.log("MongoDB Connected")
 
-   //schema
-   const schema=mongoose.Schema({ 
-    name:String,
-    age:Number,
-    email:String,
-    city:String 
-   })
+//    //schema
+//    const schema=mongoose.Schema({ 
+//     name:String,
+//     age:Number,
+//     email:String,
+//     city:String 
+//    })
 
-   const studentsModel=mongoose.model('students',schema)
+//    const studentsModel=mongoose.model('students',schema)
 
-   const result= await studentsModel.find()
+//    const result= await studentsModel.find()
 
-   console.log(result)
-}
+//    console.log(result)
+// }
 
-dbConnection()
+// dbConnection()
 
+console.log("GET REST API with Mongoose to Fetch Data from MongoDB")
+
+import express from 'express'
+
+import mongoose from 'mongoose'
+import studentModel from './models/studentModel.js';
+
+const app=express()
+
+ mongoose.connect("mongodb://localhost:27017/college").then(()=>{
+
+    console.log("_____________Connected_____________")
+
+ })
+
+app.get("/",async (req,resp)=>{
+    const result=await studentModel.find()
+     resp.send(result)
+})
+
+app.listen(3200)
