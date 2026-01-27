@@ -748,6 +748,8 @@ import studentModel from './models/studentModel.js';
 
 const app=express()
 
+app.use(express.json())
+
  mongoose.connect("mongodb://localhost:27017/college").then(()=>{
 
     console.log("_____________Connected_____________")
@@ -759,4 +761,34 @@ app.get("/",async (req,resp)=>{
      resp.send(result)
 })
 
+
+//Make POST Method REST API with Mongoose to Insert Data
+
+app.post("/save",async (req,resp)=>{
+
+    const {name,age,email,city}=req.body
+
+    if( !req.body || !name || !age || !email || !city){
+
+        resp.send({
+            message:"data not stored",
+            success:false,
+            storedIn:null
+        })
+
+        return false
+
+    }else{
+        // //insertOne()
+        // const studentData=await studentModel.insertOne(req.body)
+         
+        //create() //__v document ka version number hota hai.
+        const studentData=await studentModel.create(req.body)
+        resp.send({
+            message:"data stored",
+            success:true,
+            storedIn:studentData
+        })
+    }
+})
 app.listen(3200)
