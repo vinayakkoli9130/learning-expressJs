@@ -739,91 +739,113 @@
 
 // dbConnection()
 
-console.log("GET REST API with Mongoose to Fetch Data from MongoDB")
+// console.log("GET REST API with Mongoose to Fetch Data from MongoDB")
 
-import express from 'express'
+// import express from 'express'
 
-import mongoose from 'mongoose'
-import studentModel from './models/studentModel.js';
+// import mongoose from 'mongoose'
+// import studentModel from './models/studentModel.js';
 
-const app=express()
+// const app=express()
 
-app.use(express.json())//for request body
+// app.use(express.json())//for request body
 
- mongoose.connect("mongodb://localhost:27017/college").then(()=>{
+//  mongoose.connect("mongodb://localhost:27017/college").then(()=>{
 
-    console.log("_____________Connected_____________")
+//     console.log("_____________Connected_____________")
 
- })
+//  })
 
-app.get("/",async (req,resp)=>{
-    const result=await studentModel.find()
-     resp.send(result)
-})
+// app.get("/",async (req,resp)=>{
+//     const result=await studentModel.find()
+//      resp.send(result)
+// })
 
 
-//Make POST Method REST API with Mongoose to Insert Data
+// //Make POST Method REST API with Mongoose to Insert Data
 
-app.post("/save",async (req,resp)=>{
+// app.post("/save",async (req,resp)=>{
 
-    const {name,age,email,city}=req.body
+//     const {name,age,email,city}=req.body
 
-    if( !req.body || !name || !age || !email || !city){
+//     if( !req.body || !name || !age || !email || !city){
 
-        resp.send({
-            message:"data not stored",
-            success:false,
-            storedIn:null
-        })
+//         resp.send({
+//             message:"data not stored",
+//             success:false,
+//             storedIn:null
+//         })
 
-        return false
+//         return false
 
-    }else{
-        // //insertOne()
-        // const studentData=await studentModel.insertOne(req.body)
+//     }else{
+//         // //insertOne()
+//         // const studentData=await studentModel.insertOne(req.body)
          
-        //create() //__v document ka version number hota hai.
-        const studentData=await studentModel.create(req.body)
-        resp.send({
-            message:"data stored",
-            success:true,
-            storedIn:studentData
-        })
-    }
+//         //create() //__v document ka version number hota hai.
+//         const studentData=await studentModel.create(req.body)
+//         resp.send({
+//             message:"data stored",
+//             success:true,
+//             storedIn:studentData
+//         })
+//     }
 
-    })
+//     })
 
-    //update
-    app.put("/update/:id",async (req,resp)=>{
+//     //update
+//     app.put("/update/:id",async (req,resp)=>{
      
-        const id=req.params.id
+//         const id=req.params.id
 
-        console.log(req.body,id)
+//         console.log(req.body,id)
 
-        const studentData=await studentModel.findByIdAndUpdate(id,{...req.body})
+//         const studentData=await studentModel.findByIdAndUpdate(id,{...req.body})
 
-        resp.send({
-            message:"data updated",
-            success:true,
-            info:null
-        })
+//         resp.send({
+//             message:"data updated",
+//             success:true,
+//             info:null
+//         })
 
-})
+// })
 
-//delete
-    app.delete("/delete/:id",async (req,resp)=>{
+// //delete
+//     app.delete("/delete/:id",async (req,resp)=>{
      
-        const id=req.params.id//find id
+//         const id=req.params.id//find id
 
        
 
-        const studentData=await studentModel.findByIdAndDelete(id)//delete data from req id
+//         const studentData=await studentModel.findByIdAndDelete(id)//delete data from req id
 
-        resp.send({
-            message:"data deleted",
-            success:true,
-            info:studentData
-        })
+//         resp.send({
+//             message:"data deleted",
+//             success:true,
+//             info:studentData
+//         })
 
+// })
+// app.listen(3200)
+
+console.log("Fix CORS Issues in Node.js APIs (Cross-Origin Resource Sharing)")
+//What is Cors
+//CORS stands for Cross-Origin Resource Sharing.It's a browser security feature
+//that restricts web pages from making requests to a different domain 
+// (origin) than the one that served the web page.
+
+import express from 'express'
+
+import cors from 'cors'//import for support all domain
+
+const app=express()
+
+app.use(cors())//cors() used as middleware
+
+app.get("/",(req,resp)=>{
+resp.send({
+    name:"vinayak",
+    age:26,
+    city:"pcmc"
 })
-app.listen(3200)
+})
