@@ -748,7 +748,7 @@ import studentModel from './models/studentModel.js';
 
 const app=express()
 
-app.use(express.json())
+app.use(express.json())//for request body
 
  mongoose.connect("mongodb://localhost:27017/college").then(()=>{
 
@@ -790,5 +790,40 @@ app.post("/save",async (req,resp)=>{
             storedIn:studentData
         })
     }
+
+    })
+
+    //update
+    app.put("/update/:id",async (req,resp)=>{
+     
+        const id=req.params.id
+
+        console.log(req.body,id)
+
+        const studentData=await studentModel.findByIdAndUpdate(id,{...req.body})
+
+        resp.send({
+            message:"data updated",
+            success:true,
+            info:null
+        })
+
+})
+
+//delete
+    app.delete("/delete/:id",async (req,resp)=>{
+     
+        const id=req.params.id//find id
+
+       
+
+        const studentData=await studentModel.findByIdAndDelete(id)//delete data from req id
+
+        resp.send({
+            message:"data deleted",
+            success:true,
+            info:studentData
+        })
+
 })
 app.listen(3200)
