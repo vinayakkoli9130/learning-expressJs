@@ -547,167 +547,195 @@
 // })
 // app.listen(3200)
 
-console.log("------------Save Form Data in MongoDB---------");
+// console.log("------------Save Form Data in MongoDB---------");
 
-import express from 'express';//import express module
-import { MongoClient, ObjectId } from 'mongodb';//import MongoClient for making connection to mongodb
+// import express from 'express';//import express module
+// import { MongoClient, ObjectId } from 'mongodb';//import MongoClient for making connection to mongodb
 
-const app = express();//create express application instance
+// const app = express();//create express application instance
 
-app.set('view engine', 'ejs');//tells node.js use ejs
+// app.set('view engine', 'ejs');//tells node.js use ejs
 
-app.use(express.urlencoded({ extended: true }));//get request body data
+// app.use(express.urlencoded({ extended: true }));//get request body data
 
-app.use(express.json());//This is a built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser.
+// app.use(express.json());//This is a built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser.
 
-const client = new MongoClient("mongodb://localhost:27017");//mongodb url pass to MongoClient
+// const client = new MongoClient("mongodb://localhost:27017");//mongodb url pass to MongoClient
 
-client.connect().then((connection) => {//connect mongodb
-    const db = connection.db('college');//pass database name
+// client.connect().then((connection) => {//connect mongodb
+//     const db = connection.db('college');//pass database name
 
-    app.get("/api", async (req, resp) => {//create api route for get stuents collections
-        const students = await db.collection('students').find().toArray();
-        resp.send(students);
-    });
+//     app.get("/api", async (req, resp) => {//create api route for get stuents collections
+//         const students = await db.collection('students').find().toArray();
+//         resp.send(students);
+//     });
 
-    app.get("/ui", async (req, resp) => {//create ui route for display  stuents collections data in browser into format
-        const students = await db.collection('students').find().toArray();
-        resp.render('students', { students });
-    });
+//     app.get("/ui", async (req, resp) => {//create ui route for display  stuents collections data in browser into format
+//         const students = await db.collection('students').find().toArray();
+//         resp.render('students', { students });
+//     });
 
-    app.get("/add", (req, resp) => {//create add route for get data from browser
-        //with send() method
-        // resp.send(`
-        //     <form method="post" action="/add-student">
-        //     <input type="text" name="name" placeholder="Enter Name"> <br><br>
-        //     <input type="number" name="age" placeholder="Enter Age"> <br><br>
-        //     <input type="email" name="email" placeholder="Enter Email"> <br><br>
-        //     <input type="text" name="city" placeholder="Enter City"> <br><br>
-        //     <button>Add Student</button>
-        //     </form>
-        //     `)
+//     app.get("/add", (req, resp) => {//create add route for get data from browser
+//         //with send() method
+//         // resp.send(`
+//         //     <form method="post" action="/add-student">
+//         //     <input type="text" name="name" placeholder="Enter Name"> <br><br>
+//         //     <input type="number" name="age" placeholder="Enter Age"> <br><br>
+//         //     <input type="email" name="email" placeholder="Enter Email"> <br><br>
+//         //     <input type="text" name="city" placeholder="Enter City"> <br><br>
+//         //     <button>Add Student</button>
+//         //     </form>
+//         //     `)
 
-        //with ejs 
-        resp.render('add-student');
-    });
+//         //with ejs 
+//         resp.render('add-student');
+//     });
 
-    app.post("/add-student", async (req, resp) => {
-        resp.send("Data Submited");
-        // console.log(req.body) //express.urlencoded({extended:true})
-        const students = await db.collection('students').insertOne(req.body);//create add-student route for post data to mongodb
-        console.log(students);
-    });
+//     app.post("/add-student", async (req, resp) => {
+//         resp.send("Data Submited");
+//         // console.log(req.body) //express.urlencoded({extended:true})
+//         const students = await db.collection('students').insertOne(req.body);//create add-student route for post data to mongodb
+//         console.log(students);
+//     });
 
-    //Make POST Method REST API with Node.js & MongoDB from thunder client send data
-    //api request
-    app.post("/add-student-api", async (req, resp) => {
+//     //Make POST Method REST API with Node.js & MongoDB from thunder client send data
+//     //api request
+//     app.post("/add-student-api", async (req, resp) => {
 
-        console.log(req.body);
+//         console.log(req.body);
 
-        const { name, age, email, city } = req.body;//destructuring
+//         const { name, age, email, city } = req.body;//destructuring
 
-        if (!name || !age || !email || !city) {
+//         if (!name || !age || !email || !city) {
 
-            resp.send({ message: "operation failed", suceess: false });
+//             resp.send({ message: "operation failed", suceess: false });
 
-            return false;
-        }
-        const student = await db.collection('students').insertOne(req.body);
+//             return false;
+//         }
+//         const student = await db.collection('students').insertOne(req.body);
 
-        resp.send({ message: "data stored ", suceess: true, result: student });
+//         resp.send({ message: "data stored ", suceess: true, result: student });
 
-    });
-    //delete from thunder client 
-    app.delete("/delete/:id", async (req, resp) => {
+//     });
+//     //delete from thunder client 
+//     app.delete("/delete/:id", async (req, resp) => {
 
-        console.log(req.params.id);
+//         console.log(req.params.id);
 
-        const collection = db.collection('students');
+//         const collection = db.collection('students');
 
-        const result = await collection.deleteOne({ _id: new ObjectId(req.params.id) });
+//         const result = await collection.deleteOne({ _id: new ObjectId(req.params.id) });
 
-        if (result) {
-            resp.send({
-                message: "student data deleted",
-                suceess: true
-            });
-        } else {
-            resp.send({
-                message: "student data not deleted,try after sometime",
-                suceess: false
-            });
-        }
+//         if (result) {
+//             resp.send({
+//                 message: "student data deleted",
+//                 suceess: true
+//             });
+//         } else {
+//             resp.send({
+//                 message: "student data not deleted,try after sometime",
+//                 suceess: false
+//             });
+//         }
 
-    });
+//     });
 
-    //delete from ui
-    app.get("/ui/delete/:id", async (req, resp) => {
+//     //delete from ui
+//     app.get("/ui/delete/:id", async (req, resp) => {
 
-        console.log(req.params.id);
+//         console.log(req.params.id);
 
-        const collection = db.collection('students');
+//         const collection = db.collection('students');
 
-        const result = await collection.deleteOne({ _id: new ObjectId(req.params.id) });
+//         const result = await collection.deleteOne({ _id: new ObjectId(req.params.id) });
 
-        if (result) {
-            resp.send('<h1>Student Data Deleted<h1>');
-        } else {
-            resp.send('<h1>Student Data Not Deleted<h1>');
-        }
-        // resp.send("working")
-    });
+//         if (result) {
+//             resp.send('<h1>Student Data Deleted<h1>');
+//         } else {
+//             resp.send('<h1>Student Data Not Deleted<h1>');
+//         }
+//         // resp.send("working")
+//     });
 
-    //update data for form
-    app.get("/ui/student/:id", async (req, resp) => {
+//     //update data for form
+//     app.get("/ui/student/:id", async (req, resp) => {
 
-        const id = req.params.id;
-        console.log(id);
+//         const id = req.params.id;
+//         console.log(id);
 
-        const collection = db.collection('students');
-        const result = await collection.findOne({ _id: new ObjectId(id) });//Create ObjectId from a 24 character hex string.
-        resp.render("update-student", { result });
-    });
+//         const collection = db.collection('students');
+//         const result = await collection.findOne({ _id: new ObjectId(id) });//Create ObjectId from a 24 character hex string.
+//         resp.render("update-student", { result });
+//     });
 
-    app.get("/student/:id", async (req, resp) => {
+//     app.get("/student/:id", async (req, resp) => {
 
-        const id = req.params.id;
-        console.log(id);
+//         const id = req.params.id;
+//         console.log(id);
 
-        const collection = db.collection('students');
-        const result = await collection.findOne({ _id: new ObjectId(id) });//Create ObjectId from a 24 character hex string.
-        resp.send({ message: "update-student", success: true, results: result });
-    });
+//         const collection = db.collection('students');
+//         const result = await collection.findOne({ _id: new ObjectId(id) });//Create ObjectId from a 24 character hex string.
+//         resp.send({ message: "update-student", success: true, results: result });
+//     });
 
-    app.post("/ui/update/:id", (req, resp) => {
-        console.log(req.body);
-        console.log(req.params.id);
+//     app.post("/ui/update/:id", (req, resp) => {
+//         console.log(req.body);
+//         console.log(req.params.id);
 
-        const collection = db.collection('students');
-        const filter = { _id: new ObjectId(req.params.id) };
-        const update = { $set: req.body };
-        const result = collection.updateOne(filter, update);
-        if (result) {
-            resp.send("data updated");
-        } else {
-            resp.send("data not updated");
-        }
-    });
-    //api
-    app.put("/update/:id", (req, resp) => {
-        console.log(req.body);
-        console.log(req.params.id);
+//         const collection = db.collection('students');
+//         const filter = { _id: new ObjectId(req.params.id) };
+//         const update = { $set: req.body };
+//         const result = collection.updateOne(filter, update);
+//         if (result) {
+//             resp.send("data updated");
+//         } else {
+//             resp.send("data not updated");
+//         }
+//     });
+//     //api
+//     app.put("/update/:id", (req, resp) => {
+//         console.log(req.body);
+//         console.log(req.params.id);
 
-        const collection = db.collection('students');
-        const filter = { _id: new ObjectId(req.params.id) };
-        const update = { $set: req.body };
-        const result = collection.updateOne(filter, update);
-        if (result) {
-            resp.send({ message: "data updated", success: true, results: result });
-        } else {
-            resp.send({ message: "data not updated", success: true, results: result });
-        }
-    });
-});
+//         const collection = db.collection('students');
+//         const filter = { _id: new ObjectId(req.params.id) };
+//         const update = { $set: req.body };
+//         const result = collection.updateOne(filter, update);
+//         if (result) {
+//             resp.send({ message: "data updated", success: true, results: result });
+//         } else {
+//             resp.send({ message: "data not updated", success: true, results: result });
+//         }
+//     });
+// });
 
-app.listen(3200)
+// app.listen(3200)
+
+console.log("-----------:Connect MongoDB to Nodejs Using Mongoose:----------")
+
+
+import mongoose from "mongoose"//import mongoose
+
+async function dbConnection(){
+                              //url                  db name
+   await mongoose.connect("mongodb://localhost:27017/college")
+
+   console.log("MongoDB Connected")
+
+   //schema
+   const schema=mongoose.Schema({ 
+    name:String,
+    age:Number,
+    email:String,
+    city:String 
+   })
+
+   const studentsModel=mongoose.model('students',schema)
+
+   const result= await studentsModel.find()
+
+   console.log(result)
+}
+
+dbConnection()
 
