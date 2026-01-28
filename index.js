@@ -828,24 +828,62 @@
 // })
 // app.listen(3200)
 
-console.log("Fix CORS Issues in Node.js APIs (Cross-Origin Resource Sharing)")
-//What is Cors
-//CORS stands for Cross-Origin Resource Sharing.It's a browser security feature
-//that restricts web pages from making requests to a different domain 
-// (origin) than the one that served the web page.
+// console.log("Fix CORS Issues in Node.js APIs (Cross-Origin Resource Sharing)")
+// //What is Cors
+// //CORS stands for Cross-Origin Resource Sharing.It's a browser security feature
+// //that restricts web pages from making requests to a different domain 
+// // (origin) than the one that served the web page.
+
+// import express from 'express'
+
+// import cors from 'cors'//import for support all domain
+
+// const app=express()
+
+// app.use(cors())//cors() used as middleware
+
+// app.get("/",(req,resp)=>{
+// resp.send({
+//     name:"vinayak",
+//     age:26,
+//     city:"pcmc"
+// })
+// })
+
+console.log("--------Upload File using Multer NPM Package-------")
 
 import express from 'express'
 
-import cors from 'cors'//import for support all domain
+import multer from 'multer'
 
 const app=express()
 
-app.use(cors())//cors() used as middleware
+const storage=multer.diskStorage({
+
+    destination:function (req,file,cb){
+  cb(null,'upload')//folder name
+    },
+
+ filename:function (req,file,cb){
+  cb(null,file.originalname)//folder name
+    }
+
+})
+
+const upload=multer({storage})
 
 app.get("/",(req,resp)=>{
+resp.send(`<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="myFile">
+    <button>Upload File</button>
+    </form>`)
+})
+
+app.post("/upload",upload.single('myFile'),(req,resp)=>{
 resp.send({
-    name:"vinayak",
-    age:26,
-    city:"pcmc"
+    message:"file uploaded",
+    info:req.file
 })
 })
+
+app.listen(3200)
