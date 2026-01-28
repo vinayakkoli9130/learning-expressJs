@@ -850,40 +850,61 @@
 // })
 // })
 
-console.log("--------Upload File using Multer NPM Package-------")
+// console.log("--------Upload File using Multer NPM Package-------")
 
-import express from 'express'
+// import express from 'express'
 
-import multer from 'multer'
+// import multer from 'multer'
 
-const app=express()
+// const app=express()
 
-const storage=multer.diskStorage({
+// const storage=multer.diskStorage({//Returns a StorageEngine implementation configured to store files on the local file system.
+    
+//     destination:function (req,file,cb){
+//   cb(null,'upload')//folder name
+//     },
 
-    destination:function (req,file,cb){
-  cb(null,'upload')//folder name
-    },
+//  filename:function (req,file,cb){
+//   cb(null,file.originalname)//Name of the file on the uploader's computer.
+//     }
 
- filename:function (req,file,cb){
-  cb(null,file.originalname)//folder name
-    }
+// })
 
+// const upload=multer({storage})
+
+// app.get("/",(req,resp)=>{
+// resp.send(`<form action="/upload" method="post" enctype="multipart/form-data">
+//     <input type="file" name="myFile">
+//     <button>Upload File</button>
+//     </form>`)
+// })
+
+// app.post("/upload",upload.single('myFile'),(req,resp)=>{
+// resp.send({
+//     message:"file uploaded",
+//     info:req.file
+// })
+// })
+
+// app.listen(3200)
+
+console.log("---------Connect MongoDB Atlas with Node.js-------")
+
+import { MongoClient} from "mongodb"
+
+const url="mongodb+srv://vinayakkoli9130_db_user:Sangola%4012@cluster0.5xkqzah.mongodb.net/?appName=Cluster0"
+const database="school"
+const collection='students'
+const client=new MongoClient(url)
+await client.connect().then(()=>{
+    console.log("_________________Connected___________________")
 })
 
-const upload=multer({storage})
+async function dbConnection(){
+    const db=client.db(database)
+    const resultCollect= db.collection(collection)
+    const result=await resultCollect.find().toArray()
+    console.log(result)
 
-app.get("/",(req,resp)=>{
-resp.send(`<form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="myFile">
-    <button>Upload File</button>
-    </form>`)
-})
-
-app.post("/upload",upload.single('myFile'),(req,resp)=>{
-resp.send({
-    message:"file uploaded",
-    info:req.file
-})
-})
-
-app.listen(3200)
+}
+dbConnection()
