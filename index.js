@@ -888,23 +888,34 @@
 
 // app.listen(3200)
 
-console.log("---------Connect MongoDB Atlas with Node.js-------")
+// 
 
-import { MongoClient} from "mongodb"
+console.log("-------------Set and Get Cookies in Node js-----------")
 
-const url="mongodb+srv://vinayakkoli9130_db_user:Sangola%4012@cluster0.5xkqzah.mongodb.net/?appName=Cluster0"
-const database="school"
-const collection='students'
-const client=new MongoClient(url)
-await client.connect().then(()=>{
-    console.log("_________________Connected___________________")
+import express from 'express'
+
+const app=express()
+
+app.set("view engine","ejs")
+
+app.use(express.urlencoded({extended:true}))
+
+app.get("/login",(req,resp)=>{
+resp.render('login')
 })
 
-async function dbConnection(){
-    const db=client.db(database)
-    const resultCollect= db.collection(collection)
-    const result=await resultCollect.find().toArray()
-    console.log(result)
+app.post("/profile",(req,resp)=>{
+    resp.setHeader('Set-Cookie',"login=true")//set cookies
+    resp.setHeader('Set-Cookie',"name="+req.body.name)
+resp.render('profile')
+})
 
-}
-dbConnection()
+app.get("/",(req,resp)=>{
+    let  cookieData=req.get('cookie')//login=true; name=jay
+    cookieData=cookieData.split(";")//[ 'login=true', ' name=jay' ]
+    cookieData=cookieData[1].split("=")//[ ' name', 'jay' ]
+    console.log(cookieData[1])//jay
+resp.render('home1',{name:cookieData[1]})
+})
+
+app.listen(3200)
