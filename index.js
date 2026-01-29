@@ -921,39 +921,87 @@
 
 // app.listen(3200)
 
-console.log("__________________.Session.__________________")
+// console.log("__________________.Session.__________________")
 
-import express from 'express'
-import session from 'express-session'
+// import express from 'express'
+// import session from 'express-session'
+
+// const app=express()
+
+// app.set("view engine","ejs")
+
+// app.use(session({
+//     secret:"apple"//This is the secret used to sign the session ID cookie
+// }))
+
+// app.use(express.urlencoded({extended:true}))
+
+// app.get("/login",(req,resp)=>{
+// resp.render("login")
+// })
+
+// app.post("/profile",(req,resp)=>{
+
+//     req.session.data=req.body
+
+//     console.log(req.session.data)
+
+// resp.render("profile")
+
+// })
+
+// app.get("/",(req,resp)=>{
+//     let data=req.session.data
+//     console.log("data:",data)
+// resp.render("home1",{data})
+// })
+
+// app.listen(3200)
+
+console.log("______ Send Email with Node.js _____")
+
+import express, { text } from 'express'
+
+import nodemailer from 'nodemailer'
 
 const app=express()
 
+const transporter=nodemailer.createTransport({
+    service:'gmail',
+    auth:{
+        user:'vinayakkoli9130@gmail.com',
+        pass:""
+    }
+})
+
 app.set("view engine","ejs")
 
-app.use(session({
-    secret:"apple"//This is the secret used to sign the session ID cookie
-}))
+app.use(express.urlencoded({extended:false}))
 
-app.use(express.urlencoded({extended:true}))
-
-app.get("/login",(req,resp)=>{
-resp.render("login")
+app.get("/mail",(req,resp)=>{
+resp.render("mail")
 })
 
-app.post("/profile",(req,resp)=>{
+app.post("/submit-email",(req,resp)=>{
 
-    req.session.data=req.body
+console.log(req.body)
 
-    console.log(req.session.data)
+const mailOptions={
+    from:"vinayakkoli9130@gmail.com",
+    to:"vinayakkoli9130@gmail.com",
+    subject:req.body.subject,
+    text:req.body.mail
+}
 
-resp.render("profile")
-
+transporter.sendMail(mailOptions,(error,info)=>{
+if(error){
+    resp.send('email operation failed,try again')
+}else{
+    resp.send("email send")
+}
 })
 
-app.get("/",(req,resp)=>{
-    let data=req.session.data
-    console.log("data:",data)
-resp.render("home1",{data})
+// resp.send("email send")
 })
 
 app.listen(3200)
