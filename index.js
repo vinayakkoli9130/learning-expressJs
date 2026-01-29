@@ -890,32 +890,70 @@
 
 // 
 
-console.log("-------------Set and Get Cookies in Node js-----------")
+// console.log("-------------Set and Get Cookies in Node js-----------")
+
+// import express from 'express'//import express module
+
+// const app=express()//create express application instance
+
+// app.set("view engine","ejs")//tell express use ejs
+
+// app.use(express.urlencoded({extended:true}))//Returns middleware that only parses urlencoded bodies and only looks at requests where the Content-Type header matches the type option
+
+
+// app.get("/login",(req,resp)=>{//create login get route that render login.ejs file
+// resp.render('login')
+// })
+
+// app.post("/profile",(req,resp)=>{//create profile post route render profile.ejs file set header
+//     resp.setHeader('Set-Cookie',"login=true")//set cookies
+//     resp.setHeader('Set-Cookie',"name="+req.body.name)
+// resp.render('profile')
+// })
+
+// app.get("/",(req,resp)=>{//root route for get cookie from server
+//     let  cookieData=req.get('cookie')//Return request header.//login=true; name=jay
+//     cookieData=cookieData.split(";")//[ 'login=true', ' name=jay' ]
+//     cookieData=cookieData[1].split("=")//[ ' name', 'jay' ]
+//     console.log(cookieData[1])//jay
+// resp.render('home1',{name:cookieData[1]})//pass cookie to home1.ejs file
+// })
+
+// app.listen(3200)
+
+console.log("__________________.Session.__________________")
 
 import express from 'express'
+import session from 'express-session'
 
 const app=express()
 
 app.set("view engine","ejs")
 
+app.use(session({
+    secret:"apple"//This is the secret used to sign the session ID cookie
+}))
+
 app.use(express.urlencoded({extended:true}))
 
 app.get("/login",(req,resp)=>{
-resp.render('login')
+resp.render("login")
 })
 
 app.post("/profile",(req,resp)=>{
-    resp.setHeader('Set-Cookie',"login=true")//set cookies
-    resp.setHeader('Set-Cookie',"name="+req.body.name)
-resp.render('profile')
+
+    req.session.data=req.body
+
+    console.log(req.session.data)
+
+resp.render("profile")
+
 })
 
 app.get("/",(req,resp)=>{
-    let  cookieData=req.get('cookie')//login=true; name=jay
-    cookieData=cookieData.split(";")//[ 'login=true', ' name=jay' ]
-    cookieData=cookieData[1].split("=")//[ ' name', 'jay' ]
-    console.log(cookieData[1])//jay
-resp.render('home1',{name:cookieData[1]})
+    let data=req.session.data
+    console.log("data:",data)
+resp.render("home1",{data})
 })
 
 app.listen(3200)
